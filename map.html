@@ -1,0 +1,94 @@
+
+<!doctype html>
+<html lang="de-DE">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>HTML 5 Template</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+
+  <style>
+
+#map-wrapper {
+  position: relative;
+  max-width: 960px;
+}  
+
+#map-canvas {
+  height: 500px;
+  
+}
+
+
+#map-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  pointer-events: none;
+  font-size: 2em;
+  font-weight: bold;  
+}
+  </style>
+</head>
+<body>
+<div id="map-wrapper">
+<div id="map-canvas"></div>
+<div id="map-center">+</div>
+</div>
+<pre id="map-data"></pre>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script>
+var map;
+$(function(){
+
+  var $mapData = $('#map-data');
+
+  var mapData = function() {  
+    var text = '';
+    
+    text += 'Center: {{center}}\n';
+    text += 'Zoom: {{zoom}}\n';
+    text += 'Maptype: {{maptype}}\n';
+    text += '\n<div class="map" data-center="{{center}}" data-zoom="{{zoom}}"{{datatype}}></div>';
+    
+    var lat = map.getCenter().lat();
+    var lng = map.getCenter().lng();
+    var zoom = map.getZoom();
+    var maptype = map.getMapTypeId();
+    
+    text = text.replace(/{{center}}/g, lat + ',' + lng);
+    text = text.replace(/{{zoom}}/g, zoom);
+    text = text.replace(/{{maptype}}/g, maptype);
+    
+    if(maptype == google.maps.MapTypeId.ROADMAP) {
+      datatype = '';
+    }else{
+      datatype = ' data-type="' + maptype + '"';
+    }
+    
+    text = text.replace(/{{datatype}}/g, datatype);
+    
+    $mapData.text(text);
+  };
+  
+  
+  var mapOptions = {
+    zoom: 7,
+    center: new google.maps.LatLng(28.0, -81.4)
+  };
+  
+  
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  google.maps.event.addDomListener(map, 'idle', mapData);
+  google.maps.event.addDomListener(map, 'maptypeid_changed', mapData);
+  
+  mapData();
+
+}); // END jQuery.ready
+</script>
+</body>
+</html>
