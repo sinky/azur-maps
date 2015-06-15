@@ -2,10 +2,10 @@
 
   function azurMaps() {
     // possible shortcout layout
-    // <div class="map" data-center="28.0,-81.4" data-zoom="6" data-height="600" data-marker="1" data-sat="1">+ custom height</div>
+    // <div class="azur-map" data-center="28.0,-81.4" data-zoom="6" data-height="600" data-marker="1" data-sat="1">+ custom height</div>
     // required: class and data-center attribute
 
-    $('.azurMap').each(function(index) {
+    $('.azur-map').each(function(index) {
       var $this = $(this);
       var dataCenter = $this.attr('data-center').split(',');    
       var dataZoom = $this.attr('data-zoom') || 6;    
@@ -13,10 +13,10 @@
       var dataMarker = $this.attr('data-marker');
       var dataMapType = $this.attr('data-type');
       var dataMarkerText = $this.text();
+      var dataInfowindow = $this.attr('data-infowindow');
       var center = new google.maps.LatLng(dataCenter[0], dataCenter[1]);
       
       if(dataHeight) { $this.css('height', dataHeight); }
-      
       var mapOptions = {
         zoom: Number(dataZoom),
         center: center,
@@ -34,12 +34,14 @@
         }
       }
       if(dataMarker) {
+        var markerPos = dataMarker.split(',');
         var marker = new google.maps.Marker({
-          position: center,
+          //position: center,
+          position: new google.maps.LatLng(markerPos[0], markerPos[1]),
           map: map,
           title: dataMarkerText
         });
-        if(dataMarkerText) {
+        if(dataInfowindow) {
           var infowindow = new google.maps.InfoWindow({
             content: '<div class="infowindowcontent">' + dataMarkerText + '</div>'
           }).open(map,marker);

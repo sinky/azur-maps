@@ -27,8 +27,8 @@ if(!function_exists('azur_adminbar_map')) {
     global $wp_admin_bar;
     $wp_admin_bar->add_menu( array(
       'parent' => false,
-      'id' => 'map',
-      'title' => 'Map',
+      'id' => 'azur-map',
+      'title' => 'Azur-Map',
       'href' => plugins_url('map.html', __FILE__ ),
       'meta' => array('target' => '_blank')
     ));
